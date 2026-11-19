@@ -9,23 +9,34 @@ Entry for make.fun's bounty **"Sum up 19 November's world news in one image"**
 
 `main.py` (Python 3.13, standard library only) checks the bounty's output caps
 and copies `entry.png` to `/output/entry.png`. The image is a 1024×1024
-newspaper-style front page summing up the day's world news, drawn as original
-geometric artwork by `tools/make_image.py` (Pillow) from reporting of
-19 November 2026 by Reuters, AP, AFP, Al Jazeera, BBC and Euronews:
+broadsheet-style front page carrying **36 stories, every one occurring or first
+reported on Thursday 19 November 2026 (UTC)**: 3 illustrated leads, 10 numbered
+grid stories and 23 numbered briefs, with a region tally bar, a key-figures
+strip, a "Where it happened" locator map and a DATE CHECK box listing the
+earlier-week items that were deliberately not counted. All artwork is original
+geometric drawing rendered by `tools/make_image.py` (Pillow) at 2× and
+downsampled with Lanczos; no photographs or third-party art.
 
-- **Lead:** the first-ever Trump–Xi–Putin trilateral summit at APEC in
-  Shenzhen — nuclear arms limits and ending the wars in Ukraine and Iran on
-  the agenda; a 40-minute Trump–Putin bilateral beforehand, no deal announced.
-- **Top stories:** Ukraine's third strike of the week on the Kerch Bridge;
-  the Iran war's spread to US sites in Bahrain and Kuwait and a Riyadh tower;
-  the ICJ's landmark Rohingya genocide ruling (Myanmar forces killed
-  thousands, the court found); Anthropic's record ~$81bn IPO pricing at $83
-  a share ahead of its Nasdaq debut as ANT; Nvidia's board refusing to
-  reinstate Jensen Huang amid the China spy scandal; Denmark's approval of a
-  Greenland–US Arctic security pact.
-- **In brief:** Bangladesh's lockdown over Hasina-return unrest; South
-  Korea's court overturning an ex-PM's martial-law charges; restored
-  US–Venezuela military ties; a UK–EU post-Brexit reset summit.
+- **Leads:** the first-ever Trump–Xi–Putin trilateral summit at APEC in
+  Shenzhen; GTA VI's worldwide launch after a 13-year wait; Anthropic's
+  record $81.3bn IPO debuting on Nasdaq as ANT at $83 a share.
+- **Grid:** the ICJ's Rohingya genocide ruling; COP31 dropping the $120bn
+  adaptation goal; Cyclone Akvan's 105,304 evacuations in Odisha; the Kerch
+  Bridge strike; reported US plans for a new Iran offensive; Gaza's first
+  ground advance since the ceasefire; Korea's Suneung and its phone-hunt
+  alarms; Colombia's national strike; Australia's 4.9% jobless rate; South
+  Florida's flood school closures.
+- **Briefs (14–36):** Mexico City markets, London's AI blackout hoax, Delhi
+  smog, Fed minutes, a record Van Gogh auction, bodega cats, measles,
+  Thanksgiving costs, data-centre emissions, Walmart earnings, Nvidia's
+  board, the Greenland–US Arctic pact, Bangladesh, Korea's ex-PM,
+  US–Venezuela ties, the UK–EU summit, Riyadh, Hormuz, Tokyo markets,
+  on-this-day history, Hemedti's second death sentence, Auckland's midnight
+  unlock and Somalia's expulsion of the UAE envoy.
+
+Facts as reported on 19 Nov 2026 by Reuters, AP, AFP, BBC, Al Jazeera,
+Euronews, CNBC, NPR, The Hindu, IMD, ABS, ICJ, Korea Herald and National
+Grid; disputed claims are attributed, not stated as fact.
 
 ## Run it
 
@@ -34,7 +45,7 @@ mkdir -p out && MAKEFUN_OUTPUT_DIR=out python3 main.py
 ```
 
 Offline and deterministic: both runs write identical bytes. The PNG is
-~130 KB, 1024×1024, within the bounty's 1 MiB / 1024 px caps; `main.py`
+~660 KB, 1024×1024, within the bounty's 1 MiB / 1024 px caps; `main.py`
 verifies the PNG signature, size and dimensions before copying.
 
 ## Build
