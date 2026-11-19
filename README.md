@@ -11,11 +11,13 @@ Entry for make.fun's bounty **"Sum up 19 November's world news in one image"**
 and copies `entry.png` to `/output/entry.png`. The image is a 1024×1024
 broadsheet-style front page carrying **36 stories, every one occurring or first
 reported on Thursday 19 November 2026 (UTC)**: 3 illustrated leads, 10 numbered
-grid stories and 23 numbered briefs, with a region tally bar, a key-figures
-strip, a "Where it happened" locator map and a DATE CHECK box listing the
-earlier-week items that were deliberately not counted. All artwork is original
-geometric drawing rendered by `tools/make_image.py` (Pillow) at 2× and
-downsampled with Lanczos; no photographs or third-party art.
+grid stories and 23 numbered briefs, with dual region/field tally bars, a UTC
+day-by-hours ticker, a navy-and-gold key-figures band, a "Where it happened"
+locator map and a DATE CHECK box reasoning about the earlier-week items that
+were deliberately not counted. All artwork is original geometric drawing
+rendered by `tools/make_image.py` (Pillow) at 2× with gradient skies and a
+deterministic paper grain, downsampled with Lanczos; no photographs or
+third-party art.
 
 - **Leads:** the first-ever Trump–Xi–Putin trilateral summit at APEC in
   Shenzhen; GTA VI's worldwide launch after a 13-year wait; Anthropic's
@@ -45,7 +47,7 @@ mkdir -p out && MAKEFUN_OUTPUT_DIR=out python3 main.py
 ```
 
 Offline and deterministic: both runs write identical bytes. The PNG is
-~660 KB, 1024×1024, within the bounty's 1 MiB / 1024 px caps; `main.py`
+~960 KB, 1024×1024, within the bounty's 1 MiB / 1024 px caps; `main.py`
 verifies the PNG signature, size and dimensions before copying.
 
 ## Build

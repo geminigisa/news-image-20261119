@@ -26,6 +26,7 @@ CARD = (252, 249, 241)
 INK = (24, 24, 22)
 GRAY = (104, 98, 86)
 RED = (178, 38, 28)
+GOLD = (196, 162, 88)
 LINE = (60, 56, 48)
 PANEL = (238, 232, 218)
 NAVY = (20, 28, 44)
@@ -126,9 +127,19 @@ def flag_ru(d, x, y, w, h):
 # ── lead illustrations (panels 306 x 86) ─────────────────────────────────────
 
 def art_summit(d, x, y, w, h):
-    d.rectangle(R(x, y, x + w, y + h), fill=PANEL)
-    d.rectangle(R(x + 1, y + 1, x + w - 1, y + 46), fill=(222, 214, 196))
-    d.text(T(x + w / 2, y + 8), "APEC 2026 · SHENZHEN", font=font(F_SANS_B, 8), fill=GRAY, anchor="mm")
+    # gradient dusk sky, low sun, distant Shenzhen skyline — flat foreground on top
+    for i in range(int(h)):
+        t = i / h
+        d.rectangle(R(x, y + i, x + w, y + i + 1),
+                    fill=(int(242 - 22 * t), int(228 - 28 * t), int(202 - 36 * t)))
+    d.ellipse(R(x + w - 72, y + 10, x + w - 40, y + 42), fill=(224, 128, 86))
+    sil = (150, 132, 108)
+    for bx, bw, bh in [(8, 14, 18), (26, 10, 26), (40, 16, 14), (60, 12, 30), (76, 18, 20),
+                       (98, 10, 36), (112, 14, 22), (130, 12, 16), (146, 16, 28), (166, 10, 18),
+                       (180, 14, 24), (198, 12, 14), (214, 16, 32), (234, 10, 20), (248, 14, 26),
+                       (266, 12, 16), (282, 14, 22)]:
+        d.rectangle(R(x + bx, y + 52 - bh, x + bx + bw, y + 52), fill=sil)
+    d.text(T(x + w / 2, y + 8), "APEC 2026 · SHENZHEN", font=font(F_SANS_B, 8), fill=(96, 82, 62), anchor="mm")
     fy, fh, fw = y + 14, 26, 46
     for fx, fn in [(x + 52, flag_us), (x + 130, flag_cn), (x + 208, flag_ru)]:
         d.line([T(fx - 3, fy - 2), T(fx - 3, y + 58)], fill=INK, width=2 * S)
@@ -155,6 +166,9 @@ def art_gta(d, x, y, w, h):
     for i in range(5):
         yy = sy + 2 + i * 4
         d.rectangle(R(sx - sr, yy, sx + sr, yy + 1.6), fill=(int(24 + 96 * (yy - y) / h), int(16 + 26 * (yy - y) / h), int(54 + 36 * (yy - y) / h)))
+    for bx, bw, bh in [(16, 20, 12), (44, 16, 18), (84, 22, 14), (120, 18, 20),
+                       (156, 24, 12), (196, 16, 16), (240, 20, 14), (268, 18, 18)]:
+        d.rectangle(R(x + bx, y + 60 - bh, x + bx + bw, y + 66), fill=(62, 32, 78))
     buildings = [(10, 26, 16), (30, 18, 22), (52, 30, 14), (70, 22, 20), (94, 34, 16),
                  (114, 20, 24), (142, 28, 14), (160, 16, 20), (184, 32, 16), (204, 22, 26),
                  (234, 26, 14), (252, 18, 22), (278, 30, 18)]
@@ -165,6 +179,12 @@ def art_gta(d, x, y, w, h):
                 if (wi * 7 + wj * 13 + bx) % 4 == 0:
                     d.rectangle(R(x + bx + 2 + wi * 5, y + 66 - bh + 2 + wj * 6,
                                   x + bx + 4 + wi * 5, y + 66 - bh + 4 + wj * 6), fill=(255, 214, 120))
+    for gx in range(0, int(w) + 1, 24):
+        x2 = min(max(x + w / 2 + (gx - w / 2) * 1.8, x), x + w)
+        d.line([T(x + gx, y + 66), T(x2, y + 74)], fill=(255, 110, 180), width=S)
+    d.line([T(x, y + 66), T(x + w, y + 66)], fill=(255, 110, 180), width=S)
+    d.line([T(x, y + 70), T(x + w, y + 70)], fill=(200, 80, 150), width=S)
+
     def palm(px, py, ph):
         topx, topy = px + 3, py - ph
         d.polygon([T(px - 1.5, py), T(px + 1.5, py), T(topx + 1, topy), T(topx - 1, topy)], fill=(10, 8, 20))
@@ -185,7 +205,10 @@ def art_gta(d, x, y, w, h):
 
 
 def art_ipo(d, x, y, w, h):
-    d.rectangle(R(x, y, x + w, y + h), fill=(15, 23, 20))
+    for i in range(int(h)):
+        t = i / h
+        d.rectangle(R(x, y + i, x + w, y + i + 1),
+                    fill=(int(22 - 8 * t), int(32 - 10 * t), int(27 - 8 * t)))
     d.text(T(x + 10, y + 8), "ANT · NASDAQ · DEBUT TODAY", font=font(F_SANS_B, 8), fill=(150, 220, 170))
     ax0, ax1 = x + 24, x + w - 24
 
@@ -202,9 +225,8 @@ def art_ipo(d, x, y, w, h):
     d.line([T(px(83), y + 18), T(px(83), ay)], fill=(255, 120, 100), width=2 * S)
     d.rectangle(R(px(83) - 16, y + 6, px(83) + 16, y + 18), fill=RED)
     d.text(T(px(83), y + 12), "$83", font=font(F_SANS_B, 8.5), fill=(255, 255, 255), anchor="mm")
-    d.text(T(x + 10, y + 66), "PRICED ABOVE RANGE · ~$1.5TN VALUATION", font=font(F_SANS_B, 7.5), fill=(150, 220, 170))
     d.rectangle(R(x, y + h - 12, x + w, y + h), fill=(10, 16, 14))
-    d.text(T(x + w / 2, y + h - 6), "$81.3BN RAISED · LARGEST IPO ON RECORD", font=font(F_SANS_B, 8), fill=(150, 220, 170), anchor="mm")
+    d.text(T(x + w / 2, y + h - 6), "PRICED ABOVE $70–78 RANGE · ~$1.5TN VALUE", font=font(F_SANS_B, 8), fill=(150, 220, 170), anchor="mm")
 
 
 # ── grid icons (24 px boxes) ─────────────────────────────────────────────────
@@ -383,10 +405,26 @@ STATS = [
     ("$81.3bn", "raised in the biggest IPO"),
     ("13 yrs", "the wait for GTA VI"),
     ("551,864", "take the Suneung exam"),
-    ("105,304", "evacuated for Akvan"),
+    ("105,304", "evacuated for Cyclone Akvan"),
     ("$120bn", "adaptation goal dropped"),
-    ("4.9%", "Australia jobless rate"),
+    ("4.9%", "Australia's jobless rate"),
 ]
+
+# second classification axis: every story also belongs to one of eight fields
+FIELD_OF = {
+    1: "POLITICS & DIPLOMACY", 2: "SOCIETY & CULTURE", 3: "ECONOMY & LABOUR",
+    4: "JUSTICE", 5: "CLIMATE & ENVIRONMENT", 6: "DISASTERS & WEATHER",
+    7: "WAR & SECURITY", 8: "WAR & SECURITY", 9: "WAR & SECURITY",
+    10: "SOCIETY & CULTURE", 11: "ECONOMY & LABOUR", 12: "ECONOMY & LABOUR",
+    13: "DISASTERS & WEATHER", 14: "ECONOMY & LABOUR", 15: "TECH & AI",
+    16: "DISASTERS & WEATHER", 17: "ECONOMY & LABOUR", 18: "SOCIETY & CULTURE",
+    19: "SOCIETY & CULTURE", 20: "SOCIETY & CULTURE", 21: "SOCIETY & CULTURE",
+    22: "CLIMATE & ENVIRONMENT", 23: "ECONOMY & LABOUR", 24: "TECH & AI",
+    25: "POLITICS & DIPLOMACY", 26: "SOCIETY & CULTURE", 27: "JUSTICE",
+    28: "POLITICS & DIPLOMACY", 29: "POLITICS & DIPLOMACY", 30: "WAR & SECURITY",
+    31: "WAR & SECURITY", 32: "ECONOMY & LABOUR", 33: "SOCIETY & CULTURE",
+    34: "JUSTICE", 35: "SOCIETY & CULTURE", 36: "POLITICS & DIPLOMACY",
+}
 
 # stylized continent outlines (lon, lat) for the locator map
 CONTINENTS = [
@@ -440,16 +478,16 @@ def draw_map(d, x, y, w, h):
         px, py = proj(s["lon"], s["lat"])
         d.ellipse(R(px - 2.2, py - 2.2, px + 2.2, py + 2.2), fill=(186, 186, 180))
     pins = [[*proj(s["lon"], s["lat"]), s["n"]] for s in LEADS + GRID]
-    for _ in range(24):
+    for _ in range(40):
         for i in range(len(pins)):
             for j in range(i + 1, len(pins)):
                 dx = pins[j][0] - pins[i][0]
                 dy = pins[j][1] - pins[i][1]
                 dist = math.hypot(dx, dy)
-                if dist < 13.5:
+                if dist < 15:
                     if dist < 0.01:
                         dx, dy, dist = 1.0, 0.3, 1.04
-                    push = (13.5 - dist) / 2
+                    push = (15 - dist) / 2
                     ux, uy = dx / dist, dy / dist
                     pins[i][0] -= ux * push
                     pins[i][1] -= uy * push
@@ -460,6 +498,25 @@ def draw_map(d, x, y, w, h):
         py = min(max(py, y + 6), y + h - 6)
         d.ellipse(R(px - 5.5, py - 5.5, px + 5.5, py + 5.5), fill=RED, outline=PAPER, width=S)
         d.text(T(px, py + 0.3), str(n), font=font(F_SANS_B, 7), fill=(255, 255, 255), anchor="mm")
+
+
+def grain(img):
+    """Deterministic paper-grain overlay: kills the sterile-vector look."""
+    import random
+    rng = random.Random(20261119)
+    tile = Image.new("RGBA", (128, 128), (0, 0, 0, 0))
+    px = tile.load()
+    for ty in range(128):
+        for tx in range(128):
+            r = rng.random()
+            if r < 0.06:
+                v = 0 if r < 0.03 else 255
+                px[tx, ty] = (v, v, v, 10)
+    overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    for oy in range(0, img.size[1], 128):
+        for ox in range(0, img.size[0], 128):
+            overlay.paste(tile, (ox, oy))
+    return Image.alpha_composite(img.convert("RGBA"), overlay).convert("RGB")
 
 
 def main():
@@ -474,12 +531,15 @@ def main():
     img = Image.new("RGB", (W * S, H * S), PAPER)
     d = ImageDraw.Draw(img)
 
-    f_run = font(F_SANS_B, 11)
-    f_date = font(F_SERIF_B, 50)
-    f_deck = font(F_SERIF, 13.8)
-    f_tally = font(F_SANS_B, 9.5)
-    f_stat = font(F_SERIF_B, 24)
-    f_statcap = font(F_SANS, 10)
+    f_run = font(F_SANS_B, 10.5)
+    f_date = font(F_SERIF_B, 44)
+    f_deck = font(F_SERIF, 13)
+    f_tally = font(F_SANS_B, 9)
+    f_field = font(F_SANS_B, 8)
+    f_time = font(F_SANS, 8.5)
+    f_timeb = font(F_SANS_B, 8.5)
+    f_stat = font(F_SERIF_B, 22)
+    f_statcap = font(F_SANS, 9)
     f_kick = font(F_SANS_B, 10.5)
     f_lhead = font(F_SERIF_B, 18)
     f_lbody = font(F_SANS, 10.4)
@@ -495,14 +555,15 @@ def main():
     f_foot = font(F_SANS, 9.8)
 
     # ── running head + nameplate date ──
-    d.text(T(M, 18), "THE WORLD TODAY · WORLD EDITION", font=f_run, fill=GRAY)
-    d.text(T(W - M, 18), "THURSDAY'S NEWS · ONE PAGE · 36 STORIES", font=f_run, fill=RED, anchor="ra")
-    d.line([T(M, 30), T(W - M, 30)], fill=INK, width=3 * S)
-    d.text(T(W / 2, 58), "Thursday 19 November 2026", font=f_date, fill=INK, anchor="mm")
+    d.text(T(M, 16), "THE WORLD TODAY · WORLD EDITION · DAY 323 OF 2026", font=f_run, fill=GRAY)
+    d.text(T(W - M, 16), "36 STORIES · 7 REGIONS · 8 FIELDS · 13 ILLUSTRATED", font=f_run, fill=RED, anchor="ra")
+    d.line([T(M, 27), T(W - M, 27)], fill=INK, width=3 * S)
+    d.line([T(M, 31), T(W - M, 31)], fill=GOLD, width=S)
+    d.text(T(W / 2, 52), "Thursday 19 November 2026", font=f_date, fill=INK, anchor="mm")
     deck = "Three leaders meet in Shenzhen · GTA VI unlocks worldwide · A record IPO debuts · The World Court rules on the Rohingya"
     assert d.textlength(deck, font=f_deck) <= CW * S, "deck too wide"
-    d.text(T(W / 2, 92), deck, font=f_deck, fill=RED, anchor="mm")
-    d.line([T(M, 104), T(W - M, 104)], fill=INK, width=S)
+    d.text(T(W / 2, 82), deck, font=f_deck, fill=RED, anchor="mm")
+    d.line([T(M, 92), T(W - M, 92)], fill=INK, width=S)
 
     # ── region tally bar (counts derived from the story data) ──
     order = ["EUROPE", "AMERICAS", "ASIA", "MIDEAST", "AFRICA", "OCEANIA", "WORLD"]
@@ -510,22 +571,48 @@ def main():
     segw = CW / len(order)
     for reg in order:
         cnt = tally.get(reg, 0)
-        d.rectangle(R(tx, 110, tx + segw, 132), fill=REGIONS[reg])
-        d.text(T(tx + segw / 2, 121), f"{reg} {cnt}", font=f_tally, fill=(255, 255, 255), anchor="mm")
+        d.rectangle(R(tx, 96, tx + segw, 114), fill=REGIONS[reg])
+        d.text(T(tx + segw / 2, 105), f"{reg} {cnt}", font=f_tally, fill=(255, 255, 255), anchor="mm")
         tx += segw
 
-    # ── key figures strip ──
+    # ── field tally bar: the same 36 stories by subject ──
+    ford = ["WAR & SECURITY", "POLITICS & DIPLOMACY", "ECONOMY & LABOUR", "SOCIETY & CULTURE",
+            "JUSTICE", "CLIMATE & ENVIRONMENT", "DISASTERS & WEATHER", "TECH & AI"]
+    ftally = {}
+    for s in all_stories:
+        f = FIELD_OF[s["n"]]
+        ftally[f] = ftally.get(f, 0) + 1
+    assert sum(ftally.values()) == 36 and len(ftally) == 8
+    d.rectangle(R(M, 116, W - M, 132), fill=INK)
+    fshort = {"WAR & SECURITY": "WAR & SEC.", "POLITICS & DIPLOMACY": "POLITICS",
+              "ECONOMY & LABOUR": "ECONOMY", "SOCIETY & CULTURE": "SOCIETY",
+              "JUSTICE": "JUSTICE", "CLIMATE & ENVIRONMENT": "CLIMATE",
+              "DISASTERS & WEATHER": "WEATHER", "TECH & AI": "TECH & AI"}
+    fw = CW / 8
+    for i, f in enumerate(ford):
+        label = f"{fshort[f]} {ftally[f]}"
+        assert d.textlength(label, font=f_field) <= (fw - 4) * S, f"field label too wide: {label}"
+        d.text(T(M + i * fw + fw / 2, 124), label, font=f_field, fill=GOLD, anchor="mm")
+
+    # ── the day by hours (UTC anchors verified from the reporting) ──
+    d.text(T(M, 140), "THE DAY BY HOURS · UTC", font=f_timeb, fill=RED)
+    ticker = "00:30 ABS jobs · 05:00 GTA unlocks US East · 08:45 Suneung ends · 14:00 Bogotá marches · 14:30 ANT first trade"
+    assert d.textlength(ticker, font=f_time) <= (CW - 150) * S, "ticker too wide"
+    d.text(T(M + 150, 140), ticker, font=f_time, fill=GRAY)
+
+    # ── key figures: navy band, gold serif figures ──
+    d.rectangle(R(M, 150, W - M, 196), fill=(24, 32, 48))
+    d.line([T(M, 150), T(W - M, 150)], fill=GOLD, width=S)
+    d.line([T(M, 196), T(W - M, 196)], fill=GOLD, width=S)
     cellw = CW / 6
     for i, (num, cap) in enumerate(STATS):
         cx = M + i * cellw
         if i:
-            d.line([T(cx, 142), T(cx, 190)], fill=(200, 193, 178), width=S)
-        d.text(T(cx + cellw / 2, 156), num, font=f_stat, fill=RED, anchor="mm")
+            d.line([T(cx, 156), T(cx, 190)], fill=(52, 62, 82), width=S)
+        d.text(T(cx + cellw / 2, 168), num, font=f_stat, fill=GOLD, anchor="mm")
         lines = wrap(d, cap, f_statcap, cellw - 12)
-        assert len(lines) <= 2, f"stat caption too long: {cap}"
-        for j, ln in enumerate(lines):
-            d.text(T(cx + cellw / 2, 174 + j * 11), ln, font=f_statcap, fill=GRAY, anchor="ma")
-    d.line([T(M, 196), T(W - M, 196)], fill=INK, width=S)
+        assert len(lines) == 1, f"stat caption wraps: {cap}"
+        d.text(T(cx + cellw / 2, 184), cap, font=f_statcap, fill=(232, 228, 216), anchor="mm")
 
     # ── three lead cards ──
     lw, lh, lgap = (CW - 2 * 17) / 3, 204, 17
@@ -533,7 +620,8 @@ def main():
         x0 = M + i * (lw + lgap)
         y0 = 204
         d.rectangle(R(x0, y0, x0 + lw, y0 + lh), fill=CARD, outline=LINE, width=S)
-        s["art"](d, x0 + 1, y0 + 1, lw - 2, 86)
+        d.rectangle(R(x0 + 1, y0 + 1, x0 + lw - 1, y0 + 4), fill=REGIONS[s["region"]])
+        s["art"](d, x0 + 1, y0 + 4, lw - 2, 83)
         d.text(T(x0 + 10, y0 + 96), f"{s['n']} · {s['city']} · {s['topic']}", font=f_kick, fill=RED)
         d.text(T(x0 + lw - 10, y0 + 97), s["src"], font=f_src, fill=GRAY, anchor="ra")
         hy = para(d, (x0 + 10, y0 + 110), s["head"], f_lhead, lw - 20, INK, 1.12, maxlines=2)
@@ -549,8 +637,9 @@ def main():
         x0 = M + c * (gw + ggap)
         y0 = 424 + r * (gh + ggap)
         d.rectangle(R(x0, y0, x0 + gw, y0 + gh), fill=CARD, outline=LINE, width=S)
-        d.ellipse(R(x0 + 5, y0 + 5, x0 + 23, y0 + 23), fill=RED)
-        d.text(T(x0 + 14, y0 + 14.3), str(s["n"]), font=font(F_SANS_B, 9.5), fill=(255, 255, 255), anchor="mm")
+        d.rectangle(R(x0 + 1, y0 + 1, x0 + gw - 1, y0 + 4), fill=REGIONS[s["region"]])
+        d.ellipse(R(x0 + 5, y0 + 6, x0 + 23, y0 + 24), fill=RED)
+        d.text(T(x0 + 14, y0 + 15.3), str(s["n"]), font=font(F_SANS_B, 9.5), fill=(255, 255, 255), anchor="mm")
         d.text(T(x0 + 28, y0 + 9), f"{s['city']} · {s['topic']}", font=f_gkick, fill=GRAY)
         s["icon"](d, x0 + gw - 20, y0 + 20, 22)
         hy = para(d, (x0 + 8, y0 + 30), s["head"], f_ghead, gw - 16, INK, 1.1, maxlines=2)
@@ -588,8 +677,8 @@ def main():
     # ── date check box ──
     d.rectangle(R(M, 908, W - M, 952), outline=RED, width=2 * S)
     d.text(T(M + 8, 914), "DATE CHECK — NOT COUNTED: FIRST REPORTED BEFORE THURSDAY", font=f_dcb, fill=RED)
-    l1 = "Wed 18: Iran's Kuwait & Bahrain strikes · Anthropic's $83 pricing · GTA's $1.5bn pre-orders · Gaza's first tank advance. Tue 16: UK blackout hoax debunked."
-    l2 = "Mon 16: first COP31 draft. GTA unlocked first in New Zealand Wed 11:00 GMT — counted within today's rollout. Region bar, cards and briefs reconcile to 36."
+    l1 = "Wed 18: Iran's Kuwait & Bahrain strikes · Anthropic's $83 pricing · GTA's $1.5bn pre-orders · Gaza's first tank advance (counted above as Thursday's ongoing shelling)."
+    l2 = "Mon 16: UK blackout hoax debunked · first COP31 draft. Akvan formed Nov 16 — counted as today's evacuations. GTA's NZ unlock Wed 11:00 GMT sits within today's rollout."
     for ln in (l1, l2):
         assert d.textlength(ln, font=f_dc) <= (CW - 16) * S, f"date check line too wide: {ln[:50]}"
     d.text(T(M + 8, 928), l1, font=f_dc, fill=INK)
@@ -601,6 +690,7 @@ def main():
     d.text(T(M, 984), "Original geometric drawings · disputed claims attributed, not stated as fact · every story occurred or was first reported on the date.", font=f_foot, fill=GRAY)
     d.text(T(W - M, 984), "The World Today · make.fun", font=f_foot, fill=GRAY, anchor="ra")
 
+    img = grain(img)
     final = img.resize((W, H), Image.LANCZOS)
     out = ROOT / "entry.png"
     final.save(out, optimize=True)
